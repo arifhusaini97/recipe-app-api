@@ -6,12 +6,12 @@ from recipe import views
 # /api/recipe/tags/
 # /api/recipe/tags/1
 # /api/recipe/tags/1/
-router=DefaultRouter()
+router = DefaultRouter()
 
 router.register('tags', views.TagViewSet)
 
-app_name='recipe'
+app_name = 'recipe'
 
-urlpatterns=[
-    path('',include(router.urls))
+urlpatterns = [
+    path('', include(router.urls))
 ]
