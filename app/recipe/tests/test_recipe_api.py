@@ -16,7 +16,7 @@ RECIPES_URL = reverse('recipe:recipe-list')
 # /api/recipe/recipes/1
 def detail_url(recipe_id):
     """Return recipe detail url"""
-    return reverse('recipe:recipe-list', args=[recipe_id])
+    return reverse('recipe:recipe-detail', args=[recipe_id])
 
 
 def sample_tag(user, name='Main Course'):
