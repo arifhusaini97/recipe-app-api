@@ -1,4 +1,4 @@
-from os import stat
+# from os import stat
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -78,9 +78,35 @@ class RecipeViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
+    # _ as a prefix to the function shows that the function is intended to
+    # be private function eventhough it is always public in Python
+    def _params_to_ints(self, qs):
+        """Convert a list of string IDs to a list of integers"""
+        # This statement turns string= '1,2,3' to string_list=[1,2,3]
+        return [int(str_id) for str_id in qs.split(',')]
+
+    # http://localhost:8000/api/recipe/recipes/
     def get_queryset(self):
         """Retrieve the recipes for the authenticated user"""
-        return self.queryset.filter(user=self.request.user)
+
+        # For filtering
+        tags = self.request.query_params.get('tags')
+        ingredients = self.request.query_params.get('ingredients')
+        queryset = self.queryset
+        if tags:
+            tag_ids = self._params_to_ints(tags)
+            # __ is a django syntax to separate a foreign key object
+            # tags object has an id
+            # return all of the tags where the ID is in this list
+            queryset = queryset.filter(tags__id__in=tag_ids)
+
+        if ingredients:
+            ingredient_ids = self._params_to_ints(ingredients)
+            queryset = queryset.filter(ingredients__id__in=ingredient_ids)
+
+        return queryset.filter(user=self.request.user)
+        # End of filtering
+        # return self.queryset.filter(user=self.request.user)
 
     def get_serializer_class(self):
         """Return appropriate serializer class"""
