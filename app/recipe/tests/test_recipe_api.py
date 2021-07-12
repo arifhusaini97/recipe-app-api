@@ -264,6 +264,7 @@ class RecipeImageUploadTests(TestCase):
         recipe1.tags.add(tag1)
         recipe2.tags.add(tag2)
         recipe3 = sample_recipe(user=self.user, title='Fish and chips')
+        # http://localhost:8000/api/recipe/recipes/?tags=1
         res = self.client.get(RECIPES_URL, {'tags': f'{tag1.id},{tag2.id}'})
         serializer1 = RecipeSerializer(recipe1)
         serializer2 = RecipeSerializer(recipe2)
@@ -282,6 +283,8 @@ class RecipeImageUploadTests(TestCase):
         recipe1.ingredients.add(ingredient1)
         recipe2.ingredients.add(ingredient2)
         recipe3 = sample_recipe(user=self.user, title='Steak and mushrooms')
+
+        # http://localhost:8000/api/recipe/recipes/?ingredients=1
         res = self.client.get(
             RECIPES_URL,
             {'ingredients': f'{ingredient1.id},{ingredient2.id}'}
